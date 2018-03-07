@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: jenkins2-custom
+  name: jenkins2-custom
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: jenkins2-custom:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: jenkins
+    git:
+      uri: https://github.com//repo.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: jenkins2:latest
+        namespace: openshift
+    type: Docker
+  triggers:
+  - type: ConfigChange
+    type: ImageChange
+

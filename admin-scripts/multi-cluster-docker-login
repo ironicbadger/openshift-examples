@@ -1,0 +1,15 @@
+#/bin/bash
+# Useful when needing to login to multiple clusters at once.
+# For example when promoting images (semi-manually) from Cluster A to B.
+
+read -p 'Username: ' user
+read -sp 'Password: ' password
+
+# login to lab
+oc login -u $user -p $password https://lab.cluster.example.com
+docker login -u `oc whoami` -p `oc whoami -t` docker-registry-default.apps.lab.cluster.example.com
+
+# login to prod
+oc login -u $user -p $password https://prod.cluster.example.com
+docker login -u `oc whoami` -p `oc whoami -t` docker-registry-default.apps.prod.cluster.example.com
+

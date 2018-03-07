@@ -1,0 +1,39 @@
+#!/bin/bash
+# The following script can be used to easily switch between
+# multiple OCP clusters.
+
+OC_LAB_URL="https://lab.cluster.example.com"
+OC_PROD_URL="https://prod.cluster.example.com"
+
+usage(){
+  cat <<-EOF
+
+Available profiles:
+------------------
+ * lab
+ * prod
+
+EOF
+}
+
+if [ $# -ne 1 ]
+then
+    echo "Usage : $0 <profile_name>"
+    usage
+    exit 0
+fi
+
+
+case "$1" in
+
+lab)  echo "Switching to LAB Profile"
+    oc login $OC_LAB_URL
+    ;;
+prod)  echo "Switching to PROD Profile"
+    oc login $OC_PROD_URL
+    ;;
+*) echo "Unknown Selection"
+   usage
+   ;;
+esac
+
