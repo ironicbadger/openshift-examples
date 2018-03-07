@@ -1,6 +1,6 @@
 #!/bin/bash
 # The following script can be used to easily switch between
-# multiple OCP clusters.
+# multiple OCP clusters. Useful when placed in /usr/bin
 
 OC_LAB_URL="https://lab.cluster.example.com"
 OC_PROD_URL="https://prod.cluster.example.com"
