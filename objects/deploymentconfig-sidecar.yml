@@ -1,0 +1,113 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2018-03-12T14:04:55Z
+    generation: 11
+    labels:
+      app: logtofile
+    name: logtofile
+    namespace: ak-logging
+    resourceVersion: "103487"
+    selfLink: /oapi/v1/namespaces/ak-logging/deploymentconfigs/logtofile
+    uid: 57774761-25fe-11e8-ac3a-0ac5bdbb61cc
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: logtofile
+      deploymentconfig: logtofile
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: logtofile
+          deploymentconfig: logtofile
+      spec:
+        containers:
+        - image: docker.io/wkulhanek/logtofile@sha256:90624a732b17daee5deb15313f9d2a5917935018a8fa1b298e3446f226f54852
+          imagePullPolicy: Always
+          name: logtofile
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+        - args:
+          - /bin/sh
+          - -c
+          - sleep 5 && tail -n+1 -f /tmp/datelog.txt
+          image: docker.io/busybox:latest
+          imagePullPolicy: Always
+          name: logging-sidecar
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - logtofile
+        from:
+          kind: ImageStreamTag
+          name: logtofile:latest
+          namespace: ak-logging
+        lastTriggeredImage: docker.io/wkulhanek/logtofile@sha256:90624a732b17daee5deb15313f9d2a5917935018a8fa1b298e3446f226f54852
+      type: ImageChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2018-03-12T15:13:40Z
+      lastUpdateTime: 2018-03-12T15:13:40Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2018-03-12T15:13:40Z
+      lastUpdateTime: 2018-03-12T15:13:41Z
+      message: replication controller "logtofile-10" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 10
+    observedGeneration: 11
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
